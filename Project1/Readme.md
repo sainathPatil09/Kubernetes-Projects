@@ -39,15 +39,49 @@ It covers key Kubernetes concepts: **Pods, Deployments, Services, Rolling Update
 
 ---
 
-### **Different Workload Resources in Kubernetes**
-| Resource                  | Use Case                                |
-| ------------------------- | --------------------------------------- |
-| **Deployment**            | Stateless apps, rolling updates         |
-| **ReplicaSet**            | Keep pods running (used by Deployment)  |
-| **StatefulSet**           | Stateful apps, databases, ordered pods  |
-| **DaemonSet**             | Run pod on every node (logging/monitor) |
-| **Job**                   | One-time tasks, batch processing        |
-| **CronJob**               | Scheduled tasks                         |
+### **Concepts**
+#### **1. Pod**
+- The smallest deployable unit in Kubernetes.
+- Wraps one or more containers (usually one container per pod).
+- Pods are ephemeral → if a pod dies, it won’t come back automatically unless managed by something else (like a Deployment).
+- Each pod has its own IP address inside the cluster.
+
+#### **2. Deployment**
+- A higher-level controller that manages Pods.
+- Ensures the desired number of replicas (copies of your pod) are always running.
+- Supports:
+    - Scaling (increase/decrease replicas)
+    - Rolling updates (update without downtime)
+    - Rollback (return to older version if needed)
+- `Example:` Instead of manually running 2 pods, you define a Deployment with `replicas: 2` — Kubernetes keeps them alive.
+
+
+    #### **Different Workload Resources in Kubernetes**
+    | Resource                  | Use Case                                |
+    | ------------------------- | --------------------------------------- |
+    | **Deployment**            | Stateless apps, rolling updates         |
+    | **ReplicaSet**            | Keep pods running (used by Deployment)  |
+    | **StatefulSet**           | Stateful apps, databases, ordered pods  |
+    | **DaemonSet**             | Run pod on every node (logging/monitor) |
+    | **Job**                   | One-time tasks, batch processing        |
+    | **CronJob**               | Scheduled tasks                         |
+
+#### **3. Service**
+- Pods are temporary; their IPs change when recreated.
+- A Service provides a stable network endpoint to access a set of Pods.
+- It load-balances traffic across pods.
+- Types of Services:
+- ClusterIP (default) -> accessible only inside cluster.
+- NodePort -> exposes service on `<NodeIP>:<Port>`.
+- LoadBalancer -> cloud provider creates external LB.
+- `Example:` Your Deployment runs 2 pods of React app -> Service balances traffic between them and gives a stable IP/port.
+
+#### **4. Rolling Updates**
+- Rolling updates are handled by Deployments in Kubernetes.
+- They let you update your application version with zero downtime.
+
+#### **5. Port Forwarding**
+- Port forwarding lets you temporarily map a local port on your EC2 instance -> a port inside a Pod/Service.
 
 
 ### **Applying manifest**
