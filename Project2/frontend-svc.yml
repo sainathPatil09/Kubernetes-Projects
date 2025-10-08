@@ -1,0 +1,13 @@
+kind: SErvice
+apiVersion: v1
+metadata:
+  name: frontend-svc
+  namespace: project2
+spec:
+  selector:
+    app: frontend
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080  # 30000-32767
