@@ -1,12 +1,12 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: frontend-deployment
-  namespace: project2
+  namespace: project3
 spec:
   replicas: 2
   selector:
-    matchLabels:
+   matchLabels:
       app: frontend
   strategy:
     type: RollingUpdate
@@ -20,6 +20,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: wiings09/passop-k8s-frontend:ip
+          image: wiings09/k8s-rating-frontend:v1
           ports:
             - containerPort: 80
