@@ -1,7 +1,9 @@
-kind: StorageClass
 apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
-  name: local-storage 
-provisioner: k8s.io/minikube-hostpath
-volumeBindingMode: Immediate    # Use "WaitForFirstConsumer" if using dynamic provisioning
-reclaimPolicy: Retain
+  name: aws-ebs
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp2
+volumeBindingMode: WaitForFirstConsumer    # Use "WaitForFirstConsumer" if using dynamic provisioning  Immediate
+reclaimPolicy: Delete

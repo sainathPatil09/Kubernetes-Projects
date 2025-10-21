@@ -20,6 +20,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: wiings09/k8s-rating-frontend:v1
+          image: wiings09/k8s-rating-frontend:k8s
           ports:
             - containerPort: 80

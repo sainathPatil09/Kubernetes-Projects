@@ -148,7 +148,8 @@ aws iam attach-role-policy \
 - Install the EBS CSI Driver via Helm
 
 ```
-helm install aws-ebs-csi-driver aws-ebs-csi-driver \
+helm install aws-ebs-csi-driver/aws-ebs-csi-driver \
+  --name-template aws-ebs-csi-driver \
   --namespace kube-system
 
 ```
@@ -156,5 +157,51 @@ helm install aws-ebs-csi-driver aws-ebs-csi-driver \
 - verify Installation
   `kubectl get pods -n kube-system | grep ebs
 `
+
+---
+- **Initiating MongoDB Replica Set**
+  - We do this so that MongoDB in Kubernetes knows it’s a replica set cluster.
+  - Your backend (Mongoose) requires this to elect a PRIMARY and replicate data properly.
+  - exec inside the `mongo-statefulset-0` pod - `kubectl exec -it mongo-statefulset-0 -n dev -- mongosh`
+    ```bash
+         rs.initiate({ 
+            _id: "rs0",
+            members: [
+              { _id: 0, host: "mongo-statefulset-0.mongo.project3.svc.cluster.local:27017" },
+              { _id: 1, host: "mongo-statefulset-1.mongo.project3.svc.cluster.local:27017" }
+            ]
+        })
+
+        rs.status()
+
+       
+    ```
+
+- **Install Nginx Ingress Controller**
+    - we are adding this because so that routing is done to apppropitate service
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.1/deploy/static/provider/aws/deploy.yaml
+````
+
+- **Get External IP of NGINX Ingress**
+
+  ```bash
+  kubectl get svc -n ingress-nginx
+  nslookup <external-ip>
+  ```
+
+- **Update `/etc/hosts`**
+  Add the following line to your `/etc/hosts` file:
+
+```
+<external-ip> your-app-domain.com
+```
+
+- **Access the Application**
+  Open your browser and navigate to:
+
+```
+http://your-app-domain.com
+```
 
 ---
