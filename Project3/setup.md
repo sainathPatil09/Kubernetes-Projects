@@ -63,7 +63,7 @@ chmod 700 get_helm.sh
 ```bash
 eksctl create cluster --name=my-cluster \
                       --region=ap-south-1 \
-                      --version=1.30 \
+                      --version=1.34 \
                       --without-nodegroup
 ```
 
